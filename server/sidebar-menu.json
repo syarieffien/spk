@@ -1,0 +1,28 @@
+[
+  
+  {
+    "text": "Home",
+    "sref": "web.dashboard",
+    "icon":"icon-speedometer"
+  },
+  {
+    "text": "Input Kandidat",
+    "sref": "web.inputKandidat",
+    "icon":"icon-speedometer"
+  },
+  {
+    "text": "Proses Seleksi Kandidat",
+    "sref": "web.prosesSeleksiKandidat",
+    "icon":"icon-speedometer"
+  },
+  {
+    "text": "List Kandidat",
+    "sref": "web.listKandidat",
+    "icon":"icon-speedometer"
+  },
+  {
+    "text": "Report",
+    "sref": "web.report",
+    "icon":"icon-speedometer"
+  }
+]
