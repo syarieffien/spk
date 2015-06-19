@@ -14,63 +14,63 @@
    <!-- END messages and activity-->
    <!-- END dashboard sidebar-->
 </h3>
-<div class="row">
+<div class="row" ng-controller="kandidatCtrl">
    <div class="panel panel-info">
       <div class="panel-heading">Masukkan Data Kandidat</div>
       <div class="panel-body">
-         <form action="" method="">
+         <form ng-submit="submitSave()" validate-form='' novalidate=''>
             <table class="table-condensed" width="85%" align="center">
                <tr>
                   <td>NIM</td>
                   <td>
                      <div class="col-md-7">
-                     <input type="text" placeholder="NIM" class="form-control"></div></td>
+                     <input type="text" placeholder="NIM" class="form-control" ng-model="form.nim" ng-required="true" maxlength="10" data-parsley-minlength="10" data-parsley-type="number"></div></td>
                </tr>
                <tr>
                   <td>Nama</td>
                   <td>
                      <div class="col-md-7">
-                     <input type="text" placeholder="Nama" class="form-control"></div></td>
+                     <input type="text" placeholder="Nama" class="form-control" ng-model="form.nama" ng-required="true" data-parsley-minlength="3"></div></td>
                </tr>
                <tr>
                   <td>Tanggal Lahir</td>
                   <td>
                      <div class="col-md-7">
-                     <input type="text" placeholder="DD-MM-YYYY" class="form-control"></div></td>
+                     <input type="date" placeholder="YYYY-MM-DD" class="form-control" ng-model="form.tgl_lahir" ng-required="true"></div></td>
                </tr>
                <tr>
                   <td>Alamat</td>
                   <td>
                      <div class="col-md-7">
-                     <textarea placeholder="Alamat" class="form-control"></textarea></div></td>
+                     <textarea placeholder="Alamat" class="form-control" ng-model="form.alamat" ng-required="true"></textarea></div></td>
                </tr>
                <tr>
                   <td>IPK</td>
                   <td>
                      <div class="col-md-7">
-                     <input type="text" placeholder="3.00 - 4.00" class="form-control"></div></td>
+                     <input type="text" placeholder="3.00 - 4.00" class="form-control" ng-model="form.ipk" ng-required="true" data-parsley-type="number" maxlength="4"></div></td>
                </tr>
                <tr>
                   <td>Kompetensi</td>
                   <td>
                      <div class="col-md-7">
-                     <input type="text" placeholder="Skore 0-100" class="form-control"></div></td>
+                     <input type="text" placeholder="Skore 0-100" class="form-control" ng-model="form.kompetensi" ng-required="true" data-parsley-type="number" maxlength="3"></div></td>
                </tr>
                <tr>
                   <td>Kegiatan Kemahasiswaan</td>
                   <td>
                      <div class="col-md-7">
-                     <input type="text" placeholder="Skore 0-100" class="form-control"></div></td>
+                     <input type="text" placeholder="Skore 0-100" class="form-control" ng-model="form.keg_mhs" ng-required="true" data-parsley-type="number" maxlength="3"></div></td>
                </tr>
                <tr>
                   <td>Prestasi</td>
                   <td>
                      <div class="col-md-7">
-                     <input type="text" placeholder="Skore 0-100" class="form-control"></div></td>
+                     <input type="text" placeholder="Skore 0-100" class="form-control" ng-model="form.prestasi" ng-required="true" data-parsley-type="number" maxlength="3"></div></td>
                </tr>
                <tr><td></td>
                   <td class="text-center">
-                     <input type="submit" value="SUBMIT" class="btn btn-info btn-flat">
+                     <input type="submit" value="SUBMIT" class="btn btn-info btn-flat" ng-click="test()">
                   </td>
                </tr>
             </table>

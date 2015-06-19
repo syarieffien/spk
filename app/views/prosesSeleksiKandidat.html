@@ -14,27 +14,29 @@
    <!-- END messages and activity-->
    <!-- END dashboard sidebar-->
 </h3>
-<div class="row">
+<div class="row" ng-controller="kandidatSelectCtrl">
    <div class="panel panel-info">
       <div class="panel-heading">Masukkan Periode dan Jumlah Quota</div>
       <div class="panel-body">
-         <form action="" method="">
+         <form ng-submit="submitProses()" validate-form='' novalidate=''>
             <table class="table-condensed" width="85%" align="center">
                <tr>
                   <td>Periode Seleksi</td>
                   <td>
-                     <div class="col-md-7">
-                     <input type="text" placeholder="Semester Ganjil/Genap" class="form-control"></div></td>
+                     <div class="col-md-4">
+                     <select placeholder="Semester Ganjil/Genap" class="form-control" ng-model="periode" ng-options="periodes.value for periodes in periodes" ></select>
+                     </div>
+                  </td>
                </tr>
                <tr>
                   <td>Quota Beasiswa Tersedia</td>
                   <td>
-                     <div class="col-md-7">
-                        <input type="text" placeholder="Quota Beasiswa" class="form-control"></div></td>
+                     <div class="col-md-3">
+                        <input type="text" placeholder="Quota Beasiswa" class="form-control" ng-model="form.quota" maxlength="3" data-parsley-type="number"></div></td>
                </tr>
                <tr><td></td>
                   <td class="text-center">
-                     <input type="button" value="PROSES" style="color: #00aaaa">
+                     <input type="button" value="PROSES" class="btn btn-flat btn-info">
                   </td>
                </tr>
             </table>

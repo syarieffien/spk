@@ -24,8 +24,8 @@ var App = angular.module('angle', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCooki
 
 
         $rootScope.app = {
-                name: 'MMS',
-                description: 'Metro Motor Dealer System',
+                name: 'WEB',
+                description: 'SPK Beasiswa',
                 create:2015,
                 year: ((new Date()).getFullYear()),
                 layout: {
@@ -92,14 +92,14 @@ $urlRouterProvider.otherwise('/web/dashboard');
           url: '/inputKandidat',
           title: 'Input Kandidat',
           templateUrl: basepath('inputKandidat.html'),
-          resolve: resolveFor('flot-chart','flot-chart-plugins'),
+          resolve: resolveFor('flot-chart','flot-chart-plugins','parsley'),
           controller:'NullController'
       })
       .state('web.prosesSeleksiKandidat', {
           url: '/prosesSeleksiKandidat',
           title: 'Proses Seleksi Kandidat',
           templateUrl: basepath('prosesSeleksiKandidat.html'),
-          resolve: resolveFor('flot-chart','flot-chart-plugins'),
+          resolve: resolveFor('flot-chart','flot-chart-plugins','parsley'),
           controller:'NullController'
       })
       .state('web.hasilProses', {
@@ -1374,6 +1374,120 @@ App.controller('FormxEditableController', ['$scope', 'editableOptions', 'editabl
     };
 
     $scope.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
+
+}]);
+/**
+ * Created by rizamasta on 6/16/15.
+ */
+App.controller('kandidatCtrl',["$scope", "$state", "$http", "urlConfig", function($scope,$state,$http,urlConfig){
+    $scope.form =   {};
+    var date,
+        nama;
+    $scope.submitSave = function(){
+
+        try{
+            date                = $scope.form.tgl_lahir.split("-");
+            nama                = $scope.form.nama.toUpperCase();
+            $scope.form.nama    = nama;
+            if(date.length==3) {
+                if(date[0]>1900 &&
+                    date[1]>0&&date[1]<=12 &&
+                        date[2]>0 && date[2]<=31
+                )
+                {
+                if ($scope.form.ipk <= 4 && $scope.form.ipk >= 3) {
+                    if (
+                        $scope.form.prestasi <= 100 && $scope.form.prestasi >= 0 &&
+                        $scope.form.keg_mhs <= 100 && $scope.form.keg_mhs >= 0 &&
+                        $scope.form.kompetensi <= 100 && $scope.form.kompetensi > 0
+                    ) {
+                        $http({
+                            method: 'POST',
+                            url: urlConfig.gatewayUrl('kandidat/input'),
+                            data: encoding_url($scope.form),
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                        })
+                            .success(function (response) {
+                                //console.log(response);
+                                if(response.message=='success')
+                                {
+                                    window.alert('Berhasil menyimpan');
+                                    $scope.form={}
+                                }
+                                else{
+                                    window.alert(response.message);
+                                }
+                            })
+                            .error(function (er) {
+                                console.log(er);
+                            })
+                    }
+
+                }
+                    else{
+                    window.alert('IPK tidak memadai');
+                }
+                }
+                else {
+                    window.alert('Tanggal input salah');
+                }
+            }
+            else{
+                window.alert('Format Tanggal Salah!')
+            }
+        }
+        catch (err){
+            $state.go('web.inputKandidat');
+        }
+    };
+
+    $scope.viewList = function(){
+      try{
+          $http({
+              method    : 'POST',
+              url       : urlConfig.gatewayUrl('kandidat/view'),
+              data      : '',
+              headers   : {'Conten-Type' : 'application/x-www-form-urlencoded'}
+          })
+              .success(function(response){
+                  if(response.message=='success') {
+                      $scope.dataKandidat = response.data;
+                  }
+                  else{
+                      window.alert(response.message);
+                  }
+              })
+              .error(function(e){
+                  console.log(e)
+              });
+
+      }
+      catch(errorList){
+
+      }
+    };
+
+}]);
+/**
+ * Created by rizamasta on 6/17/15.
+ */
+App.controller('kandidatSelectCtrl', ["$scope", "$http", "urlConfig", "$state", function($scope,$http,urlConfig,$state){
+
+    $scope.periodes = [{id:'Ganjil',value:'Ganjil'},{id:'Genap',value:'Genap'}];
+    $scope.periode  = $scope.periodes[0];
+    $scope.form     = {};
+    $scope.submitProses= function(){
+        try{
+            $scope.form.quota = $scope.periode.value;
+            $http({
+                method      : 'POST',
+                url         : urlConfig.gatewayUrl('kandidat/proses')
+            })
+        }
+        catch(error){
+            $state.go('web.prosesSeleksiKandidat');
+        }
+    };
 
 }]);
 /**
@@ -5355,6 +5469,20 @@ App.service('toggleStateService', ['$rootScope', function($rootScope) {
   };
 
 }]);
+/**
+ * Created by rizamasta on 6/16/15.
+ */
+App.service('urlConfig',function(){
+   //var urlBase,
+   //    urlGateway;
+    this.baseUrl = function (uri){
+        return "http://localhost/belajar/spk/#/web"+uri;
+    };
+    this.gatewayUrl=function(uri){
+        return "http://localhost/beasiswa-api/index.php/"+uri;
+    };
+
+});
 /**=========================================================
  * Module: utils.js
  * jQuery Utility functions library 

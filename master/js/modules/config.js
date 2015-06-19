@@ -49,14 +49,14 @@ $urlRouterProvider.otherwise('/web/dashboard');
           url: '/inputKandidat',
           title: 'Input Kandidat',
           templateUrl: basepath('inputKandidat.html'),
-          resolve: resolveFor('flot-chart','flot-chart-plugins'),
+          resolve: resolveFor('flot-chart','flot-chart-plugins','parsley'),
           controller:'NullController'
       })
       .state('web.prosesSeleksiKandidat', {
           url: '/prosesSeleksiKandidat',
           title: 'Proses Seleksi Kandidat',
           templateUrl: basepath('prosesSeleksiKandidat.html'),
-          resolve: resolveFor('flot-chart','flot-chart-plugins'),
+          resolve: resolveFor('flot-chart','flot-chart-plugins','parsley'),
           controller:'NullController'
       })
       .state('web.hasilProses', {

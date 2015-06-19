@@ -14,11 +14,48 @@
    <!-- END messages and activity-->
    <!-- END dashboard sidebar-->
 </h3>
-<div class="row">
-   <div class="panel panel-info">
+<div class="row" ng-controller="kandidatCtrl">
+   <div class="panel panel-info" ng-init="viewList()">
       <div class="panel-heading">List Kandidat</div>
       <div class="panel-body">
-
+         <!--{{ dataKandidat | json}}-->
+         <table class="table-condensed" width="100%">
+            <tr>
+               <td  class="text-right">
+                  <div class="col-md-4">
+                     <input type="text" ng-model="key" class="form-control" placeholder="Pencarian Data">
+                  </div>
+               </td>
+            </tr>
+         </table>
+         <table class="table table-condensed">
+            <thead>
+               <tr class="text-bold panel-footer">
+                  <td width="50px" height="45">#</td>
+                  <td width="90px">NIM</td>
+                  <td width="150px">NAMA</td>
+                  <td>TGL LAHIR</td>
+                  <td>IPK</td>
+                  <td>Komp.</td>
+                  <td>Keg Mhs</td>
+                  <td>Pres.</td>
+                  <td>STATUS</td>
+               </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="data in dataKandidat | filter:key">
+               <td width="50px">{{$index+1}}</td>
+               <td width="90px">{{data.nim}}</td>
+               <td width="150px">{{data.nama}}</td>
+               <td>{{data.tgl_lahir | date:'dd/MM/yyyy'}}</td>
+               <td>{{data.ipk}}</td>
+               <td>{{data.kompetensi}}</td>
+               <td>{{data.keg_mhs}}</td>
+               <td>{{data.prestasi}}</td>
+               <td>{{data.status}}</td>
+            </tr>
+            </tbody>
+         </table>
       </div>
       <div class="panel-footer">
 
