@@ -80,12 +80,26 @@ $urlRouterProvider.otherwise('/web/dashboard');
           resolve: resolveFor('flot-chart','flot-chart-plugins'),
           controller:'authController'
       })
+      .state('web.reportDetail', {
+          url: '/report/:idPeriode',
+          title: 'Report Detail',
+          templateUrl: basepath('reportDetail.html'),
+          resolve: resolveFor('flot-chart','flot-chart-plugins'),
+          controller:'authController'
+      })
+      .state('web.reportCetak', {
+          url: '/reportCetak/:idPeriode',
+          title: 'Report Cetak',
+          templateUrl: basepath('reportCetak.html'),
+          resolve: resolveFor('flot-chart','flot-chart-plugins'),
+          controller:'authController'
+      })
 
     .state('login', {
         url: '/login',
         title: 'Login',
         templateUrl: 'app/pages/login.html',
-          resolve: resolveFor('icons','parsley'),
+          resolve: resolveFor('fastclick', 'modernizr', 'icons', 'screenfull', 'animo', 'sparklines', 'slimscroll', 'classyloader', 'toaster', 'whirl','parsley'),
         controller: 'loginController'
 
     })
@@ -96,12 +110,12 @@ $urlRouterProvider.otherwise('/web/dashboard');
         controller: 'loginController',
         resolve: resolveFor('icons','parsley')
     })
-    .state('login.out', {
-        url: '/logout',
-        title: 'Logout',
-        controller: 'logoutController',
-          resolve: resolveFor('icons','parsley')
-    })
+      .state('out', {
+          url: '/out',
+          title: 'Logout',
+          templateUrl: 'app/pages/logout.html',
+          controller: 'NullController'
+      })
     ;
 
 

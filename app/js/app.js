@@ -123,12 +123,26 @@ $urlRouterProvider.otherwise('/web/dashboard');
           resolve: resolveFor('flot-chart','flot-chart-plugins'),
           controller:'authController'
       })
+      .state('web.reportDetail', {
+          url: '/report/:idPeriode',
+          title: 'Report Detail',
+          templateUrl: basepath('reportDetail.html'),
+          resolve: resolveFor('flot-chart','flot-chart-plugins'),
+          controller:'authController'
+      })
+      .state('web.reportCetak', {
+          url: '/reportCetak/:idPeriode',
+          title: 'Report Cetak',
+          templateUrl: basepath('reportCetak.html'),
+          resolve: resolveFor('flot-chart','flot-chart-plugins'),
+          controller:'authController'
+      })
 
     .state('login', {
         url: '/login',
         title: 'Login',
         templateUrl: 'app/pages/login.html',
-          resolve: resolveFor('icons','parsley'),
+          resolve: resolveFor('fastclick', 'modernizr', 'icons', 'screenfull', 'animo', 'sparklines', 'slimscroll', 'classyloader', 'toaster', 'whirl','parsley'),
         controller: 'loginController'
 
     })
@@ -139,12 +153,12 @@ $urlRouterProvider.otherwise('/web/dashboard');
         controller: 'loginController',
         resolve: resolveFor('icons','parsley')
     })
-    .state('login.out', {
-        url: '/logout',
-        title: 'Logout',
-        controller: 'logoutController',
-          resolve: resolveFor('icons','parsley')
-    })
+      .state('out', {
+          url: '/out',
+          title: 'Logout',
+          templateUrl: 'app/pages/logout.html',
+          controller: 'NullController'
+      })
     ;
 
 
@@ -1557,14 +1571,9 @@ App.controller('loginController',['$rootScope','$state','$scope','$http','urlCon
 /**
  * Created by rizamasta on 5/10/15.
  */
-App.controller('logoutController',['$rootScope','$state','$scope','$http', function($rootScope,$state,$scope,$http){
-   var msg =confirm('Anda ingin Logout?');
-   if(msg)
-   {
-       localStorage.clear();
-       $state.go('login.user');
-   }
-
+App.controller('logoutController', ["$state", function($state){
+    localStorage.clear();
+    $state.go('login.user');
 }]);
 
 /**=========================================================
@@ -2391,6 +2400,121 @@ App.controller('portletsController', [ '$scope', '$timeout', '$window', function
   /*function resetListSize() {
     $(this).css('min-height', "");
   }*/
+
+}]);
+/**
+ * Created by rizamasta on 6/20/15.
+ */
+App.controller('reportCetakController',["$state", "$http", "$scope", "urlConfig", "$stateParams", function($state,$http,$scope,urlConfig,$stateParams){
+    var dataUser;
+
+    try{
+       dataUser = JSON.parse(localStorage['data_login']);
+       $scope.user={
+           username     : dataUser.result[0].username,
+           id_periode   : $stateParams.idPeriode
+       };
+       $http({
+           method       : 'POST',
+           url          : urlConfig.gatewayUrl('report/periodeDetail'),
+           data         : encoding_url($scope.user),
+           headers      : {'Content-Type' : 'application/x-www-form-urlencoded'}
+       })
+           .success(function(response){
+               if(response.message=='success')
+               {
+                   $scope.report = response.data;
+                   window.print();
+               }
+           })
+           .error(function(errorResponse){
+
+           })
+   }
+    catch(error){
+        $state.go('login.user');
+    }
+
+
+}]);
+/**
+ * Created by rizamasta on 6/20/15.
+ */
+App.controller('reportController',["$state", "$http", "$scope", "urlConfig", function($state,$http,$scope,urlConfig){
+    var dataUser;
+    try{
+       dataUser = JSON.parse(localStorage['data_login']);
+       $scope.user={
+           username :dataUser.result[0].username
+       };
+       $http({
+           method       : 'POST',
+           url          : urlConfig.gatewayUrl('report/periode'),
+           data         : encoding_url($scope.user),
+           headers      : {'Content-Type' : 'application/x-www-form-urlencoded'}
+       })
+           .success(function(response){
+               if(response.message=='success')
+               {
+                   $scope.report = response.data;
+               }
+           })
+           .error(function(errorResponse){
+
+           })
+   }
+    catch(error){
+        $state.go('login.user');
+    }
+
+    $scope.lihatDetail  = function(id){
+        $state.go('web.reportDetail',{idPeriode :id});
+
+    };
+    $scope.cetak        = function(id){
+        $state.go('web.reportCetak',{idPeriode :id});
+    }
+
+}]);
+/**
+ * Created by rizamasta on 6/20/15.
+ */
+App.controller('reportDetailController',["$state", "$http", "$scope", "urlConfig", "$stateParams", function($state,$http,$scope,urlConfig,$stateParams){
+    var dataUser;
+
+    try{
+       dataUser = JSON.parse(localStorage['data_login']);
+       $scope.user={
+           username     : dataUser.result[0].username,
+           id_periode   : $stateParams.idPeriode
+       };
+       $http({
+           method       : 'POST',
+           url          : urlConfig.gatewayUrl('report/periodeDetail'),
+           data         : encoding_url($scope.user),
+           headers      : {'Content-Type' : 'application/x-www-form-urlencoded'}
+       })
+           .success(function(response){
+               if(response.message=='success')
+               {
+                   $scope.report = response.data;
+               }
+           })
+           .error(function(errorResponse){
+
+           })
+   }
+    catch(error){
+        $state.go('login.user');
+    }
+
+    $scope.lihatDetail  = function(id){
+        $state.go('web.reportDetail',{idPeriode :id});
+
+    };
+    $scope.cetak        = function(id){
+        $state.go('web.reportCetak',{idPeriode :id});
+    }
 
 }]);
 /**=========================================================
@@ -5502,7 +5626,7 @@ App.service('urlConfig',function(){
         return "http://localhost/belajar/spk/#/web"+uri;
     };
     this.gatewayUrl=function(uri){
-        return "http://localhost/beasiswa-api/index.php/"+uri;
+        return "http://localhost/spk-api/index.php/"+uri;
     };
 
 });

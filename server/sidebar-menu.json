@@ -24,5 +24,10 @@
     "text": "Report",
     "sref": "web.report",
     "icon":"icon-speedometer"
+  },
+  {
+    "text": "Logout",
+    "sref": "out",
+    "icon":"icon-lock"
   }
 ]
