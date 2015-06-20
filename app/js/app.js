@@ -86,49 +86,49 @@ $urlRouterProvider.otherwise('/web/dashboard');
         title: 'Dashboard',
         templateUrl: basepath('dashboard.html'),
         resolve: resolveFor('flot-chart','flot-chart-plugins'),
-        controller:'NullController'
+        controller:'authController'
     })
       .state('web.inputKandidat', {
           url: '/inputKandidat',
           title: 'Input Kandidat',
           templateUrl: basepath('inputKandidat.html'),
           resolve: resolveFor('flot-chart','flot-chart-plugins','parsley'),
-          controller:'NullController'
+          controller:'authController'
       })
       .state('web.prosesSeleksiKandidat', {
           url: '/prosesSeleksiKandidat',
           title: 'Proses Seleksi Kandidat',
           templateUrl: basepath('prosesSeleksiKandidat.html'),
           resolve: resolveFor('flot-chart','flot-chart-plugins','parsley'),
-          controller:'NullController'
+          controller:'authController'
       })
       .state('web.hasilProses', {
           url: '/hasilProses',
           title: 'Hasil Proses',
           templateUrl: basepath('hasilProses.html'),
           resolve: resolveFor('flot-chart','flot-chart-plugins'),
-          controller:'NullController'
+          controller:'authController'
       })
       .state('web.listKandidat', {
           url: '/listKandidat',
           title: 'List Kandidat',
           templateUrl: basepath('listKandidat.html'),
           resolve: resolveFor('flot-chart','flot-chart-plugins'),
-          controller:'NullController'
+          controller:'authController'
       })
       .state('web.report', {
           url: '/report',
           title: 'Report',
           templateUrl: basepath('report.html'),
           resolve: resolveFor('flot-chart','flot-chart-plugins'),
-          controller:'NullController'
+          controller:'authController'
       })
 
     .state('login', {
         url: '/login',
-        abstract: true,
         title: 'Login',
         templateUrl: 'app/pages/login.html',
+          resolve: resolveFor('icons','parsley'),
         controller: 'loginController'
 
     })
@@ -137,12 +137,13 @@ $urlRouterProvider.otherwise('/web/dashboard');
         title: 'Login',
         templateUrl: 'app/pages/login.html',
         controller: 'loginController',
-        resolve: resolveFor('parsley')
+        resolve: resolveFor('icons','parsley')
     })
     .state('login.out', {
         url: '/logout',
         title: 'Logout',
-        controller: 'logoutController'
+        controller: 'logoutController',
+          resolve: resolveFor('icons','parsley')
     })
     ;
 
@@ -328,12 +329,17 @@ App
 
   })
 ;
-App.controller('authController',['$state','$scope','$http', function($state,$scope,$http){
+App.controller('authController',['$state', function($state){
    // console.log("log"+localStorage['login']);
-    if(typeof(localStorage['data_login'])=="undefined"){
+
+        try{
+            JSON.parse(localStorage['data_login']);
+        }
+    catch (err) {
         localStorage.clear();
         $state.go('login.user');
     }
+
 }]);
 /**=========================================================
  * Module: calendar-ui.js
@@ -1476,10 +1482,12 @@ App.controller('kandidatSelectCtrl', ["$scope", "$http", "urlConfig", "$state", 
     $scope.periodes = [{id:'ganjil',value:'Ganjil'},{id:'genap',value:'Genap'}];
     $scope.periode  = $scope.periodes[0];
     $scope.form     = {};
+
     $scope.submitProses= function(){
         try{
+            var dataUser = JSON.parse(localStorage['data_login']);
             $scope.form.semester    = $scope.periode.id;
-            $scope.form.username    = "rizamasta";
+            $scope.form.username    = dataUser.result[0].username;
             $http({
                 method      : 'POST',
                 url         : urlConfig.gatewayUrl('seleksi/proses'),
@@ -1508,7 +1516,7 @@ App.controller('kandidatSelectCtrl', ["$scope", "$http", "urlConfig", "$state", 
 /**
  * Created by rizamasta on 5/10/15.
  */
-App.controller('loginController',['$rootScope','$state','$scope','$http', function($rootScope,$state,$scope,$http){
+App.controller('loginController',['$rootScope','$state','$scope','$http','urlConfig', function($rootScope,$state,$scope,$http,urlConfig){
 
     $rootScope.currTitle = $state.current.title;
     $rootScope.pageTitle = function() {
@@ -1522,23 +1530,23 @@ App.controller('loginController',['$rootScope','$state','$scope','$http', functi
         var urlData  = encoding_url($scope.account);
         $http({
             method: 'POST',
-            url: base_gateway('account/login/'),
+            url: urlConfig.gatewayUrl('login'),
             data: urlData,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).success(function(data){
 
            $scope.result    = data;
 
-            if($scope.result.responseData){
+            if($scope.result.message=='success'){
                 $scope.authMsg = "";
                 localStorage['data_login']  = JSON.stringify($scope.result);
-                $state.go('memo.dashboard');
-                console.log("benar");
+                $state.go('web.dashboard');
+
             }
             else{
                 $scope.authMsg = "Password atau Username salah";
             }
-            console.log(data);
+
         }).error(function(e){
             $scope.authMsg = "Error "+e;
         });

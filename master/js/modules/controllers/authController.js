@@ -1,7 +1,12 @@
-App.controller('authController',['$state','$scope','$http', function($state,$scope,$http){
+App.controller('authController',['$state', function($state){
    // console.log("log"+localStorage['login']);
-    if(typeof(localStorage['data_login'])=="undefined"){
+
+        try{
+            JSON.parse(localStorage['data_login']);
+        }
+    catch (err) {
         localStorage.clear();
         $state.go('login.user');
     }
+
 }]);

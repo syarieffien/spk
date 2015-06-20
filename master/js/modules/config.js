@@ -43,49 +43,49 @@ $urlRouterProvider.otherwise('/web/dashboard');
         title: 'Dashboard',
         templateUrl: basepath('dashboard.html'),
         resolve: resolveFor('flot-chart','flot-chart-plugins'),
-        controller:'NullController'
+        controller:'authController'
     })
       .state('web.inputKandidat', {
           url: '/inputKandidat',
           title: 'Input Kandidat',
           templateUrl: basepath('inputKandidat.html'),
           resolve: resolveFor('flot-chart','flot-chart-plugins','parsley'),
-          controller:'NullController'
+          controller:'authController'
       })
       .state('web.prosesSeleksiKandidat', {
           url: '/prosesSeleksiKandidat',
           title: 'Proses Seleksi Kandidat',
           templateUrl: basepath('prosesSeleksiKandidat.html'),
           resolve: resolveFor('flot-chart','flot-chart-plugins','parsley'),
-          controller:'NullController'
+          controller:'authController'
       })
       .state('web.hasilProses', {
           url: '/hasilProses',
           title: 'Hasil Proses',
           templateUrl: basepath('hasilProses.html'),
           resolve: resolveFor('flot-chart','flot-chart-plugins'),
-          controller:'NullController'
+          controller:'authController'
       })
       .state('web.listKandidat', {
           url: '/listKandidat',
           title: 'List Kandidat',
           templateUrl: basepath('listKandidat.html'),
           resolve: resolveFor('flot-chart','flot-chart-plugins'),
-          controller:'NullController'
+          controller:'authController'
       })
       .state('web.report', {
           url: '/report',
           title: 'Report',
           templateUrl: basepath('report.html'),
           resolve: resolveFor('flot-chart','flot-chart-plugins'),
-          controller:'NullController'
+          controller:'authController'
       })
 
     .state('login', {
         url: '/login',
-        abstract: true,
         title: 'Login',
         templateUrl: 'app/pages/login.html',
+          resolve: resolveFor('icons','parsley'),
         controller: 'loginController'
 
     })
@@ -94,12 +94,13 @@ $urlRouterProvider.otherwise('/web/dashboard');
         title: 'Login',
         templateUrl: 'app/pages/login.html',
         controller: 'loginController',
-        resolve: resolveFor('parsley')
+        resolve: resolveFor('icons','parsley')
     })
     .state('login.out', {
         url: '/logout',
         title: 'Logout',
-        controller: 'logoutController'
+        controller: 'logoutController',
+          resolve: resolveFor('icons','parsley')
     })
     ;
 

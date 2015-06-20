@@ -6,10 +6,12 @@ App.controller('kandidatSelectCtrl', function($scope,$http,urlConfig,$state){
     $scope.periodes = [{id:'ganjil',value:'Ganjil'},{id:'genap',value:'Genap'}];
     $scope.periode  = $scope.periodes[0];
     $scope.form     = {};
+
     $scope.submitProses= function(){
         try{
+            var dataUser = JSON.parse(localStorage['data_login']);
             $scope.form.semester    = $scope.periode.id;
-            $scope.form.username    = "rizamasta";
+            $scope.form.username    = dataUser.result[0].username;
             $http({
                 method      : 'POST',
                 url         : urlConfig.gatewayUrl('seleksi/proses'),
