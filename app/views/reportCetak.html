@@ -1,0 +1,47 @@
+
+<div class="row" ng-controller="reportCetakController">
+   <div class="panel panel-plat panel-default">
+      <div class="panel-heading">Hasil Proses System Penunjang Keputusan Beasiswa</div>
+      <div class="panel-body">
+         <table class="table table-condensed">
+            <thead>
+            <tr class="text-bold panel-footer">
+               <td width="50px" height="45">#</td>
+               <td width="90px">NIM</td>
+               <td width="150px">NAMA</td>
+               <td>SMSTR</td>
+               <td>USIA</td>
+               <td>IPK</td>
+               <td>Komp.</td>
+               <td>Keg Mhs</td>
+               <td>Pres.</td>
+               <td>S</td>
+               <td>HASIL S</td>
+               <td>V</td>
+               <td>STATUS</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="data in report | filter:key">
+               <td width="50px">{{$index+1}}</td>
+               <td width="90px">{{data.nim}}</td>
+               <td width="150px">{{data.nama}}</td>
+               <td>{{data.semester}}</td>
+               <td>{{data.usia}}</td>
+               <td>{{data.ipk}}</td>
+               <td>{{data.kompetensi}}</td>
+               <td>{{data.keg_mhs}}</td>
+               <td>{{data.prestasi}}</td>
+               <td>{{data.s}}</td>
+               <td>{{data.hasil_s}}</td>
+               <td>{{data.v}}</td>
+               <td>{{data.status}}</td>
+            </tr>
+            </tbody>
+         </table>
+      </div>
+      <div class="panel-footer">
+
+      </div>
+   </div>
+</div>
